@@ -98,7 +98,7 @@ public class Robot {
 		if (name.equals("pu")) {
 			return Action.PICK_UP;
 		}		
-
+		System.out.println("push");
 		
 		return Action.DO_NOTHING;
 		
