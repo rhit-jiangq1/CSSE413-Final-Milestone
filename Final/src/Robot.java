@@ -100,6 +100,7 @@ public class Robot {
 		}		
 		System.out.println("push");
 		System.out.println("push");
+		System.out.println("push");
 		
 		return Action.DO_NOTHING;
 		
