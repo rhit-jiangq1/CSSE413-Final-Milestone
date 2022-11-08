@@ -65,6 +65,7 @@ public class Environment {
 	}
 	
 	public ArrayList<Robot> getRobots(){
+		System.out.print("yeah");
 		return this.robots;
 	}
 	
