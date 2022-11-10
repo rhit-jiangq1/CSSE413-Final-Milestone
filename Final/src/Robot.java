@@ -166,17 +166,16 @@ public class Robot {
 	}
 
 	public boolean canPickUp() {
-		if(this.b != null) {//block in hand
+		if (this.b != null) {// block in hand
 			return false;
-		}else if(!this.env.isTarget(posRow, posCol)) {// no block on current position
+		} else if (!this.env.isTarget(posRow, posCol)) {// no block on current position
 			return false;
-		}else if(this.env.isTower(posRow, posCol)) {// stacked
+		} else if (this.env.isTower(posRow, posCol)) {// stacked
 			return false;
 		}
 		return true;
-		
 	}
-	
+
 	public Action processPickUp(IndexedWord word) {
 		String blockID = "";
 		String index = "";
@@ -205,11 +204,25 @@ public class Robot {
 //				System.out.println("index: " + index);
 			}
 		}
-		
+
+		if (!canPickUp()) {
+			outputAct = Action.DO_NOTHING;
+			System.out.println("Can't pick up");
+		}
+
 		System.out.println("Action: " + outputAct.toString());
 		System.out.println("Block ID: " + blockID);
 		System.out.println("Position: " + index);
 		return outputAct;
+	}
+
+	public boolean canPutDown() {
+		if (this.b == null) {// block in hand
+			return false;
+		} else if (this.env.isTarget(posRow, posCol)) {// no block on current position
+			return false;
+		}
+		return true;
 	}
 
 	public Action processPutDown(IndexedWord word) {
@@ -242,11 +255,28 @@ public class Robot {
 //				System.out.println("index: " + index);
 			}
 		}
-		
+
+		if (!canPutDown()) {
+			outputAct = Action.DO_NOTHING;
+			System.out.println("Can't put down");
+		}
+
 		System.out.println("Action: " + outputAct.toString());
 		System.out.println("Block ID: " + blockID);
 		System.out.println("Position: " + index);
+
 		return outputAct;
+	}
+
+	public boolean canStack() {
+		if (this.b == null) {// block in hand
+			return false;
+		} else if (!this.env.isTarget(posRow, posCol)) {// no block on current position
+			return false;
+		} else if (!this.env.isTower(posRow, posCol)) {// stacked
+			return false;
+		}
+		return true;
 	}
 
 	public Action processStack(IndexedWord word) {
@@ -274,13 +304,29 @@ public class Robot {
 //				System.out.println("index: " + index);
 			}
 		}
-		
+
+		if (!canStack()) {
+			outputAct = Action.DO_NOTHING;
+			System.out.println("Can't stack");
+		}
+
 		System.out.println("Action: " + outputAct.toString());
 		System.out.println("Block ID: " + blockID);
 		System.out.println("Position: " + index);
 		return outputAct;
 	}
-	
+
+	public boolean canUnstack() {
+		if (this.b != null) {// block in hand
+			return false;
+		} else if (!this.env.isTarget(posRow, posCol)) {// no block on current position
+			return false;
+		} else if (!this.env.isTower(posRow, posCol)) {// stacked
+			return false;
+		}
+		return true;
+	}
+
 	public Action processUnstack(IndexedWord word) {
 		String blockID = "";
 		String index = "";
@@ -306,10 +352,29 @@ public class Robot {
 //				System.out.println("index: " + index);
 			}
 		}
-		
+
+		if (!canUnstack()) {
+			outputAct = Action.DO_NOTHING;
+			System.out.println("Can't unstack");
+		}
+
 		System.out.println("Action: " + outputAct.toString());
 		System.out.println("Block ID: " + blockID);
 		System.out.println("Position: " + index);
 		return outputAct;
+	}
+
+	public boolean isCoordinate(String s) {
+		if (s.contains(",")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public Position Cdn2Pos(String s) {
+		String[] arrOfStr = s.split(",", 2);
+		Position p = new Position(Integer.parseInt(arrOfStr[0]), Integer.parseInt(arrOfStr[1]));
+		return p;
 	}
 }
