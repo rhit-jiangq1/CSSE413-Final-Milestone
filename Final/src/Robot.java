@@ -118,7 +118,6 @@ public class Robot {
 		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
 		if (sentences != null && !sentences.isEmpty()) {
 			CoreMap sentence = sentences.get(0);
-
 			graph = sentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
 			graph.prettyPrint();
 
@@ -166,36 +165,50 @@ public class Robot {
 		return Action.DO_NOTHING;
 	}
 
+	public boolean canPickUp() {
+		if(this.b != null) {//block in hand
+			return false;
+		}else if(!this.env.isTarget(posRow, posCol)) {// no block on current position
+			return false;
+		}else if(this.env.isTower(posRow, posCol)) {// stacked
+			return false;
+		}
+		return true;
+		
+	}
+	
 	public Action processPickUp(IndexedWord word) {
 		String blockID = "";
 		String index = "";
 		Action outputAct = Action.DO_NOTHING;
 		List<IndexedWord> lst = graph.getChildList(word);
-		System.out.println("child list: " + lst);
+//		System.out.println("child list: " + lst);
 		for (IndexedWord w : lst) {
 			if (w.tag().equals("RP") && w.word().equals("up") && outputAct.equals(Action.DO_NOTHING)) {
 				outputAct = Action.PICK_UP;
-				System.out.println("Action changed to pickup");
+//				System.out.println("Action changed to pickup");
 			}
 
 			if (w.tag().equals("NN")) {
 				if (w.word().equals("block")) {
 					List<IndexedWord> blockChildLst = graph.getChildList(w);
-					System.out.println("block child list: " + blockChildLst);
+//					System.out.println("block child list: " + blockChildLst);
 					for (IndexedWord w1 : blockChildLst) {
 						if (w1.tag().equals("CD") && blockID == "") {
 							blockID = w1.word();
-							System.out.println("blockID: " + blockID);
+//							System.out.println("blockID: " + blockID);
 						}
 					}
-				} else if (w.word().equals("position")) {
-
 				}
 			} else if (w.tag().equals("CD")) {
 				index = w.word();
-				System.out.println("index: " + index);
+//				System.out.println("index: " + index);
 			}
 		}
+		
+		System.out.println("Action: " + outputAct.toString());
+		System.out.println("Block ID: " + blockID);
+		System.out.println("Position: " + index);
 		return outputAct;
 	}
 
@@ -204,21 +217,21 @@ public class Robot {
 		String index = "";
 		Action outputAct = Action.DO_NOTHING;
 		List<IndexedWord> lst = graph.getChildList(word);
-		System.out.println("child list: " + lst);
+//		System.out.println("child list: " + lst);
 		for (IndexedWord w : lst) {
 			if (w.tag().equals("RP") && w.word().equals("down") && outputAct.equals(Action.DO_NOTHING)) {
 				outputAct = Action.PUT_DOWN;
-				System.out.println("Action changed to putdown");
+//				System.out.println("Action changed to putdown");
 			}
 
 			if (w.tag().equals("NN")) {
 				if (w.word().equals("block")) {
 					List<IndexedWord> blockChildLst = graph.getChildList(w);
-					System.out.println("block child list: " + blockChildLst);
+//					System.out.println("block child list: " + blockChildLst);
 					for (IndexedWord w1 : blockChildLst) {
 						if (w1.tag().equals("CD") && blockID == "") {
 							blockID = w1.word();
-							System.out.println("blockID: " + blockID);
+//							System.out.println("blockID: " + blockID);
 						}
 					}
 				} else if (w.word().equals("position")) {
@@ -226,9 +239,13 @@ public class Robot {
 				}
 			} else if (w.tag().equals("CD")) {
 				index = w.word();
-				System.out.println("index: " + index);
+//				System.out.println("index: " + index);
 			}
 		}
+		
+		System.out.println("Action: " + outputAct.toString());
+		System.out.println("Block ID: " + blockID);
+		System.out.println("Position: " + index);
 		return outputAct;
 	}
 
@@ -237,16 +254,16 @@ public class Robot {
 		String index = "";
 		Action outputAct = Action.STACK;
 		List<IndexedWord> lst = graph.getChildList(word);
-		System.out.println("child list: " + lst);
+//		System.out.println("child list: " + lst);
 		for (IndexedWord w : lst) {
 			if (w.tag().equals("NN")) {
 				if (w.word().equals("block")) {
 					List<IndexedWord> blockChildLst = graph.getChildList(w);
-					System.out.println("block child list: " + blockChildLst);
+//					System.out.println("block child list: " + blockChildLst);
 					for (IndexedWord w1 : blockChildLst) {
 						if (w1.tag().equals("CD") && blockID == "") {
 							blockID = w1.word();
-							System.out.println("blockID: " + blockID);
+//							System.out.println("blockID: " + blockID);
 						}
 					}
 				} else if (w.word().equals("position")) {
@@ -254,9 +271,13 @@ public class Robot {
 				}
 			} else if (w.tag().equals("CD")) {
 				index = w.word();
-				System.out.println("index: " + index);
+//				System.out.println("index: " + index);
 			}
 		}
+		
+		System.out.println("Action: " + outputAct.toString());
+		System.out.println("Block ID: " + blockID);
+		System.out.println("Position: " + index);
 		return outputAct;
 	}
 	
@@ -265,16 +286,16 @@ public class Robot {
 		String index = "";
 		Action outputAct = Action.UNSTACK;
 		List<IndexedWord> lst = graph.getChildList(word);
-		System.out.println("child list: " + lst);
+//		System.out.println("child list: " + lst);
 		for (IndexedWord w : lst) {
 			if (w.tag().equals("NN")) {
 				if (w.word().equals("block")) {
 					List<IndexedWord> blockChildLst = graph.getChildList(w);
-					System.out.println("block child list: " + blockChildLst);
+//					System.out.println("block child list: " + blockChildLst);
 					for (IndexedWord w1 : blockChildLst) {
 						if (w1.tag().equals("CD") && blockID == "") {
 							blockID = w1.word();
-							System.out.println("blockID: " + blockID);
+//							System.out.println("blockID: " + blockID);
 						}
 					}
 				} else if (w.word().equals("position")) {
@@ -282,9 +303,13 @@ public class Robot {
 				}
 			} else if (w.tag().equals("CD")) {
 				index = w.word();
-				System.out.println("index: " + index);
+//				System.out.println("index: " + index);
 			}
 		}
+		
+		System.out.println("Action: " + outputAct.toString());
+		System.out.println("Block ID: " + blockID);
+		System.out.println("Position: " + index);
 		return outputAct;
 	}
 }
