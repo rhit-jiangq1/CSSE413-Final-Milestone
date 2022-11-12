@@ -1,2 +1,12 @@
-/Robot$ProcessReturn.class
-/Robot$State.class
+/Planner.class
+/Clear.class
+/Handempty.class
+/Holding.class
+/On.class
+/OnTable.class
+/PickUp.class
+/Predicate.class
+/PutDown.class
+/Rule.class
+/StackIt.class
+/UnStackIt.class
